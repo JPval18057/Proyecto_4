@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="myCanvas" width="1900" height="900" style="border:1px solid #d3d3d3;">
+</canvas>
+
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+//variables que manejan el color
+var green1 = "#00F700";
+var red1   = "#FF2000";
+var white1 = "#FFFFFF";
+ctx.lineWidth = "7";
+ctx.strokeStyle = "black";
+
+
+//variables que manejan la posición de los cuadros
+var v_spacing = 150;
+var x_rect = 650; //200 default
+var y1_rect = 250;
+var y2_rect = y1_rect + v_spacing;
+var y3_rect = y2_rect + v_spacing;
+var y4_rect = y3_rect + v_spacing;
+var width_rect = 200;
+var height_rect = 100;
+//Variables de texto
+ctx.font = "25px Helvetica";
+var P1 = "Parqueo 1";
+var P2 = "Parqueo 2";
+var P3 = "Parqueo 3";
+var P4 = "Parqueo 4";
+var x_text  = x_rect + 43;
+var y1_text = y1_rect+(height_rect/2)+5;
+var y2_text = y1_text + v_spacing;
+var y3_text = y2_text + v_spacing;
+var y4_text = y3_text + v_spacing;
+
+
+//Control del programa
+var color1 = '1';
+var color2 = '1';
+var color3 = '1';
+var color4 = '1';
+var lugares_num = "3";
+
+//Sistema de numeración de lugares
+var lugares_texto = "Lugares disponibles: ";
+var lugares = lugares_texto + lugares_num;
+
+
+
+//Función dibujar rectángulo
+function Pbox(x, y, width, height, color, parqueo){
+
+if (color=='1') {
+ctx.fillStyle = green1;
+} else {
+ctx.fillStyle = red1;
+}
+ctx.strokeRect(x,y,width,height);
+ctx.fillRect(x,y,width,height);
+//Dibujamos el texto
+ctx.fillStyle = "black";
+ctx.fillText(parqueo, x+43, y+(height/2)+5);
+
+return 0;
+}
+
+
+
+
+
+
+
+//Programa principal (dibujamos las cosas)
+//Primer rectangulo (parqueo 1)
+Pbox(x_rect,y1_rect,width_rect,height_rect,color1,P1);
+
+//Segundo rectangulo (parqueo 2)
+Pbox(x_rect,y2_rect,width_rect,height_rect,color2,P2);
+
+//Tercer rectangulo (parqueo 3)
+Pbox(x_rect,y3_rect,width_rect,height_rect,color3,P3);
+
+//Cuarto rectangulo (parqueo 4)
+Pbox(x_rect,y4_rect,width_rect,height_rect,color4,P4);
+
+
+
+
+
+
+//Dibujamos el título de la página
+ctx.font = "bold 80px Trebuchet MS";
+ctx.fillStyle = "black";
+ctx.textAlign = "center";
+ctx.fillText("Parqueos Oakland Mall", 1900/2, 100);
+
+//Dibujamos el autor y sus datos
+//context.font="italic small-caps bold 12px arial";
+ctx.font = "bold 30px Candara";
+ctx.fillStyle = "black";
+ctx.textAlign = "center";
+ctx.fillText("Por: Juan Pablo Valenzuela (18057)", 1900/2, 150);
+
+//Fuentes:
+//Comic Sans MS
+//Trebuchet MS
+//Candara (recomendada)
+//Tahoma (no recomendada)
+//Calibri
+//Cambria (recomendada)
+//Optima
+
+
+//Dibujamos los lugares disponibles
+ctx.font = "bold 30px Cambria";
+ctx.fillStyle = "black";
+ctx.textAlign = "center";
+ctx.fillText(lugares, x_rect+500, 305);
+
+
+
+//Prueba borrador
+ctx.fillStyle = white1;
+ctx.fillRect(x_rect+320,y1_rect+20,400,50);
+
+
+
+
+
+
+
+
+
+
+//Función que pide datos
+var sendHttpRequest = function(method, url){
+
+	var xhr = new XMLHttpRequest();
+	xhr.open(method, url);
+
+	xhr.responseType = 'json';
+	var receive = xhr.response;
+	xhr.onload = function() {
+		console.log(receive);
+	};
+
+	xhr.send();
+	
+	return receive;
+
+};
+
+
+
+
+//FUNCION QUE PIDE DATOS AL ESP32
+//La función setInterval ejecuta una rutina cada cierto tiempo
+setInterval(function(){ 
+	//Acá va la rutina
+	sendHttpRequest("GET","http://192.168.1.11/leer");
+ }, 1000);
+
+</script>
+
+</body>
+</html>
